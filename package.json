@@ -9,15 +9,24 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@aws-sdk/client-rekognition": "^3.775.0",
+    "@google-cloud/speech": "^7.0.1",
+    "bcryptjs": "^3.0.2",
+    "face-api.js": "^0.22.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.13.0",
+    "next": "15.2.4",
+    "next-auth": "^4.24.11",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "next": "15.2.4"
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4",
     "eslint": "^9",
     "eslint-config-next": "15.2.4",
-    "@eslint/eslintrc": "^3"
+    "tailwindcss": "^4"
   }
 }
