@@ -1,12 +1,18 @@
 'use client';
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { Input } from '@/components/ui/Input';
+import { Button } from '@/components/ui/Button';
+import { Card } from '@/components/ui/Card';
+import { Alert } from '@/components/ui/Alert';
+import { Box, Typography, Container } from '@mui/material';
 
 export default function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isCameraStarted, setIsCameraStarted] = useState(false);
+  const [alertState, setAlertState] = useState({ open: false, message: '', severity: 'error' });
   const videoRef = useRef(null);
   const router = useRouter();
 
@@ -57,7 +63,11 @@ export default function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     if (!videoRef.current?.srcObject) {
-      alert('Please start the camera first');
+      setAlertState({
+        open: true,
+        message: 'Please start the camera first',
+        severity: 'warning'
+      });
       return;
     }
 
@@ -96,12 +106,22 @@ export default function Login() {
         username: data.user.username
       }));
 
+      // Show success message before redirect
+      setAlertState({
+        open: true,
+        message: 'Login successful!',
+        severity: 'success'
+      });
+
       stopCamera();
       router.push('/chat');
 
     } catch (error) {
-      console.error('Login error:', error);
-      alert(error.message || 'Login failed. Please try again.');
+      setAlertState({
+        open: true,
+        message: error.message || 'Login failed. Please try again.',
+        severity: 'error'
+      });
     } finally {
       setIsLoading(false);
     }
@@ -113,72 +133,94 @@ export default function Login() {
   }, []);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-md w-96">
-        <h1 className="text-2xl font-bold mb-6 text-center">Login</h1>
-        
-        <form onSubmit={handleLogin} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Username</label>
-            <input
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-              required
-            />
-          </div>
+    <Container maxWidth="sm">
+      <Box sx={{ 
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}>
+        <Card>
+          <Typography variant="h4" gutterBottom align="center">
+            Login
+          </Typography>
+          
+          <form onSubmit={handleLogin}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+              <Input
+                label="Username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+                fullWidth
+              />
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-              required
-            />
-          </div>
+              <Input
+                label="Password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                fullWidth
+              />
 
-          <div className="space-y-4">
-            {!isCameraStarted ? (
-              <button
-                type="button"
-                onClick={startCamera}
-                className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
-              >
-                Start Camera
-              </button>
-            ) : (
-              <div className="space-y-4">
-                <video
-                  ref={videoRef}
-                  autoPlay
-                  playsInline
-                  muted
-                  className="w-full rounded-lg border"
-                />
-                <button
-                  type="submit"
-                  disabled={isLoading}
-                  className="w-full bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 disabled:bg-gray-400"
+              {!isCameraStarted ? (
+                <Button
+                  onClick={startCamera}
+                  variant="contained"
+                  color="primary"
+                  fullWidth
                 >
-                  {isLoading ? 'Verifying...' : 'Login with Face ID'}
-                </button>
-              </div>
-            )}
-          </div>
-        </form>
+                  Start Camera
+                </Button>
+              ) : (
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                  <video
+                    ref={videoRef}
+                    autoPlay
+                    playsInline
+                    muted
+                    style={{ 
+                      width: '100%', 
+                      borderRadius: '8px',
+                      border: '1px solid #e0e0e0'
+                    }}
+                  />
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    color="success"
+                    disabled={isLoading}
+                    fullWidth
+                  >
+                    {isLoading ? 'Verifying...' : 'Login with Face ID'}
+                  </Button>
+                </Box>
+              )}
+            </Box>
+          </form>
 
-        <div className="mt-4 text-center">
-          <p className="text-sm text-gray-600">
-            Don't have an account?{' '}
-            <a href="/signup" className="text-blue-500 hover:text-blue-700">
-              Sign up
-            </a>
-          </p>
-        </div>
-      </div>
-    </div>
+          <Box sx={{ mt: 3, textAlign: 'center' }}>
+            <Typography variant="body2" color="textSecondary">
+              Don't have an account?{' '}
+              <Button
+                variant="text"
+                color="primary"
+                onClick={() => router.push('/signup')}
+              >
+                Sign up
+              </Button>
+            </Typography>
+          </Box>
+        </Card>
+
+        <Alert
+          open={alertState.open}
+          message={alertState.message}
+          severity={alertState.severity}
+          onClose={() => setAlertState({ ...alertState, open: false })}
+        />
+      </Box>
+    </Container>
   );
 }

@@ -10,7 +10,11 @@
   },
   "dependencies": {
     "@aws-sdk/client-rekognition": "^3.775.0",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
     "@google-cloud/speech": "^7.0.1",
+    "@mui/icons-material": "^7.0.0",
+    "@mui/material": "^7.0.0",
     "bcryptjs": "^3.0.2",
     "face-api.js": "^0.22.2",
     "jsonwebtoken": "^9.0.2",
