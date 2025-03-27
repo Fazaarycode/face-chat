@@ -1,75 +1,59 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useRef } from 'react';
-import io from 'socket.io-client';
+import { useState, useEffect, useRef } from "react";
+import io from "socket.io-client";
+import Avatar from "react-avatar";
 
 let socket;
 
 export default function ChatMessages({ room, username }) {
   const [messages, setMessages] = useState([]);
   const [connected, setConnected] = useState(false);
-  const [loading, setLoading] = useState(true);
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  // Add this function to fetch messages
   const fetchMessages = async () => {
     try {
       const response = await fetch(`/api/messages?roomId=${room}`);
       const data = await response.json();
       if (!response.ok) throw new Error(data.error);
-      
-      console.log('Fetched messages:', data);
       setMessages(data);
     } catch (error) {
-      console.error('Error fetching messages:', error);
-    } finally {
-      setLoading(false);
+      console.error("Error fetching messages:", error);
     }
   };
 
   useEffect(() => {
-    fetchMessages(); // Fetch messages when component mounts
-    
+    fetchMessages();
+
     const socketInitializer = async () => {
       try {
-        await fetch('/api/socket');
-        
-        socket = io('http://localhost:3001', {
-          transports: ['websocket'],
-          reconnectionAttempts: 5
+        await fetch("/api/socket");
+        socket = io("http://localhost:3001", {
+          transports: ["websocket"],
+          reconnectionAttempts: 5,
         });
 
-        socket.on('connect', () => {
-          console.log('Socket connected with ID:', socket.id);
+        socket.on("connect", () => {
           setConnected(true);
-          socket.emit('join-room', room);
+          socket.emit("join-room", room);
         });
 
-        socket.on('new-message', (message) => {
-          console.log('New message received:', message);
-          setMessages(prev => [...prev, message]);
+        socket.on("new-message", (message) => {
+          setMessages((prev) => [...prev, message]);
           scrollToBottom();
         });
 
-        socket.on('connect_error', (error) => {
-          console.error('Socket connection error:', error);
-        });
-
-        socket.on('disconnect', () => {
-          console.log('Socket disconnected');
+        socket.on("disconnect", () => {
           setConnected(false);
         });
 
-        // Make socket available globally for sending messages
         window.socket = socket;
-
       } catch (error) {
-        console.error('Socket initialization error:', error);
-        setLoading(false);
+        console.error("Socket initialization error:", error);
       }
     };
 
@@ -77,48 +61,124 @@ export default function ChatMessages({ room, username }) {
 
     return () => {
       if (socket) {
-        socket.emit('leave-room', room);
+        socket.emit("leave-room", room);
         socket.disconnect();
       }
     };
   }, [room]);
 
-  // Debug render
-  console.log('Current messages:', messages);
-  console.log('Connection status:', connected);
-
   return (
-    <div className="bg-white rounded-lg shadow p-4 h-96 overflow-y-auto">
+    <div className="bg-[#efeae2] rounded-xl shadow-lg p-6 h-[600px] overflow-y-auto">
       {!connected && (
-        <div className="text-center text-yellow-500 mb-4">
+        <div className="text-center text-amber-600 mb-4 font-medium">
           Connecting to chat...
         </div>
       )}
-      
+
       <div className="space-y-4">
         {messages.length === 0 ? (
-          <div className="text-center text-gray-500">
+          <div className="text-center text-slate-500 font-medium">
             No messages yet. Start the conversation!
           </div>
         ) : (
           messages.map((message, index) => (
-            <div 
+            <div
               key={index}
-              className={`flex ${message.sender === username ? 'justify-end' : 'justify-start'}`}
+              className="container flex items-start gap-4"
+              style={{
+                display: "flex",
+                justifyContent: message.senderName == username ? "flex-end" : "flex-start",
+                marginTop: "10px",
+                marginBottom: "10px",
+              }}
             >
-              <div 
-                className={`rounded-lg px-4 py-2 max-w-[70%] ${
-                  message.sender === username 
-                    ? 'bg-blue-500 text-white' 
-                    : 'bg-gray-100'
-                }`}
+              {message.senderName !== username && (
+                <div className="flex flex-col items-center space-y-1">
+                  <Avatar
+                    name={message.senderName || "Unknown"}
+                    size="32"
+                    round={true}
+                    className="shadow-sm border-2 border-white"
+                  />
+                </div>
+              )}
+
+              <div
+                style={{
+                  backgroundColor: message.senderName === username ? "#d9fdd3" : "#ffffff",
+                  boxShadow: "0 1px 0.5px rgba(11,20,26,.13)",
+                  position: "relative",
+                  borderRadius: "7.5px",
+                  padding: "6px 7px 8px 9px",
+                  maxWidth: "70%",
+                  marginLeft: message.senderName === username ? "auto" : "0",
+                  marginRight: message.senderName === username ? "0" : "auto",
+                  minWidth: "120px",
+                }}
               >
-                <p className="text-sm font-semibold">{message.sender}</p>
-                <p>{message.content}</p>
-                <p className="text-xs opacity-75">
-                  {new Date(message.timestamp).toLocaleTimeString()}
-                </p>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "2px",
+                  }}
+                >
+                  {message.senderName !== username && (
+                    <span
+                      style={{
+                        fontSize: "12.8px",
+                        fontWeight: "500",
+                        color: "#1fa855",
+                        marginBottom: "2px",
+                      }}
+                    >
+                      {message.senderName}
+                    </span>
+                  )}
+                  <div
+                    style={{
+                      fontSize: "14.2px",
+                      lineHeight: "19px",
+                      color: "#111b21",
+                      fontWeight: "400",
+                      marginRight: "48px",
+                      wordBreak: "break-word",
+                      paddingBottom: "16px",
+                    }}
+                  >
+                    {message.content}
+                  </div>
+                  <span
+                    style={{
+                      fontSize: "11px",
+                      color: "#667781",
+                      position: "absolute",
+                      right: "7px",
+                      bottom: "6px",
+                      backgroundColor: "inherit",
+                      paddingLeft: "4px",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {new Date(message.timestamp).toLocaleTimeString([], {
+                      hour: "numeric",
+                      minute: "2-digit",
+                      hour12: true,
+                    })}
+                  </span>
+                </div>
               </div>
+
+              {message.senderName === username && (
+                <div className="flex flex-col items-center space-y-1">
+                  <Avatar
+                    name={message.senderName || "Unknown"}
+                    size="32"
+                    round={true}
+                    className="shadow-sm border-2 border-white"
+                  />
+                </div>
+              )}
             </div>
           ))
         )}
@@ -126,4 +186,4 @@ export default function ChatMessages({ room, username }) {
       </div>
     </div>
   );
-} 
+}

@@ -8,14 +8,25 @@ export default function Navbar() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const userData = localStorage.getItem('user');
-    if (userData) {
-      setUser(JSON.parse(userData));
-    }
+    const handleStorageChange = () => {
+      const userData = localStorage.getItem('user');
+      setUser(userData ? JSON.parse(userData) : null);
+    };
+
+    // Check user data on mount
+    handleStorageChange();
+
+    // Listen for changes to localStorage
+    window.addEventListener('storage', handleStorageChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
   }, []);
 
   const handleLogout = () => {
     localStorage.removeItem('user');
+    setUser(null);
     router.push('/');
   };
 
@@ -31,7 +42,7 @@ export default function Navbar() {
           FaceChat
         </Typography>
 
-        {user && (
+        {user ? (
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
             <Avatar sx={{ bgcolor: 'secondary.main' }}>
               {user.username[0].toUpperCase()}
@@ -45,6 +56,13 @@ export default function Navbar() {
               Logout
             </Button>
           </div>
+        ) : (
+          <Button 
+            color="inherit" 
+            onClick={() => router.push('/')}
+          >
+            Login
+          </Button>
         )}
       </Toolbar>
     </AppBar>

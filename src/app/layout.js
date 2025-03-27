@@ -1,5 +1,6 @@
 import { Providers } from './providers'
 import ThemeRegistry from '@/components/ThemeRegistry'
+import AuthWrapper from '@/components/AuthWrapper'
 
 export const metadata = {
   title: "FaceChat App",
@@ -12,7 +13,9 @@ export default function RootLayout({ children }) {
       <body>
         <Providers>
           <ThemeRegistry>
-            {children}
+            <AuthWrapper>
+              {children}
+            </AuthWrapper>
           </ThemeRegistry>
         </Providers>
       </body>

@@ -2,6 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { Box, Typography, Container } from '@mui/material';
+import { Input } from '@/components/ui/Input';
+import { Button } from '@/components/ui/Button';
+import { Card } from '@/components/ui/Card';
 
 function RoomsPage() {
   const [rooms, setRooms] = useState([]);
@@ -37,50 +41,52 @@ function RoomsPage() {
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-6">Chat Rooms</h1>
-      
-      {/* Create Room Form */}
-      <form onSubmit={createRoom} className="mb-8 bg-white rounded-lg shadow p-4">
-        <div className="flex space-x-2">
-          <input
-            type="text"
-            value={newRoomName}
-            onChange={(e) => setNewRoomName(e.target.value)}
-            placeholder="Enter room name"
-            className="flex-1 border p-2 rounded"
-          />
-          <button 
-            type="submit"
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
-          >
-            Create Room
-          </button>
-        </div>
-      </form>
+    <Container maxWidth="md">
+      <Box sx={{ mt: 4 }}>
+        <Typography variant="h4" gutterBottom>
+          Chat Rooms
+        </Typography>
 
-      {/* Rooms List */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {rooms.map((room) => (
-          <div 
-            key={room._id} 
-            className="bg-white rounded-lg shadow p-4 cursor-pointer hover:shadow-lg transition-shadow"
-            onClick={() => router.push(`/rooms/${room._id}`)}
-          >
-            <h2 className="text-xl font-semibold mb-2">{room.name}</h2>
-            <p className="text-gray-500 text-sm">
-              Created: {new Date(room.createdAt).toLocaleDateString()}
-            </p>
-          </div>
-        ))}
-      </div>
+        <form onSubmit={createRoom}>
+          <Box sx={{ display: 'flex', gap: 2, mb: 4 }}>
+            <Input
+              fullWidth
+              value={newRoomName}
+              onChange={(e) => setNewRoomName(e.target.value)}
+              placeholder="Enter room name"
+            />
+            <Button 
+              type="submit"
+              variant="contained"
+              color="primary"
+            >
+              Create Room
+            </Button>
+          </Box>
+        </form>
 
-      {rooms.length === 0 && (
-        <p className="text-center text-gray-500 mt-8">
-          No rooms available. Create one to get started!
-        </p>
-      )}
-    </div>
+        <Box sx={{ display: 'grid', gap: 4, gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))' }}>
+          {rooms.map((room) => (
+            <Card 
+              key={room._id} 
+              sx={{ p: 2, cursor: 'pointer' }}
+              onClick={() => router.push(`/rooms/${room._id}`)}
+            >
+              <Typography variant="h6">{room.name}</Typography>
+              <Typography variant="body2" color="textSecondary">
+                Created: {new Date(room.createdAt).toLocaleDateString()}
+              </Typography>
+            </Card>
+          ))}
+        </Box>
+
+        {rooms.length === 0 && (
+          <Typography variant="body2" color="textSecondary" align="center" sx={{ mt: 4 }}>
+            No rooms available. Create one to get started!
+          </Typography>
+        )}
+      </Box>
+    </Container>
   );
 }
 

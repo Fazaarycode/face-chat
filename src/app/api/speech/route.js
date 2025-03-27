@@ -1,3 +1,4 @@
+import { NextResponse } from 'next/server';
 import { SpeechClient } from '@google-cloud/speech';
 
 // Initialize the Speech-to-Text client
@@ -5,19 +6,17 @@ const speechClient = new SpeechClient({
   keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS,
 });
 
-export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-
+export async function POST(request) {
   try {
-    const { audioData } = req.body; // Base64 encoded audio
+    const { audioData } = await request.json();
 
     // Configure the recognition settings
     const config = {
-      encoding: 'LINEAR16',
-      sampleRateHertz: 16000,
+      encoding: 'WEBM_OPUS',
+      sampleRateHertz: 48000,
       languageCode: 'en-US',
+      model: 'default',
+      audioChannelCount: 1,
     };
 
     // Create the audio input object
@@ -25,22 +24,30 @@ export default async function handler(req, res) {
       content: audioData,
     };
 
+    console.log('Sending request with config:', config);
+
     // Perform the transcription
     const [response] = await speechClient.recognize({
       config: config,
       audio: audio,
     });
+    
+    console.log('Full API response:', response);
 
     const transcription = response.results
       .map(result => result.alternatives[0].transcript)
       .join('\n');
 
-    res.status(200).json({ 
+    return NextResponse.json({ 
       success: true,
       transcription 
     });
   } catch (error) {
     console.error('Speech-to-text error:', error);
-    res.status(500).json({ error: 'Speech-to-text failed' });
+    return NextResponse.json({ 
+      success: false, 
+      error: 'Speech-to-text failed',
+      details: error.message
+    }, { status: 500 });
   }
-}
+} 

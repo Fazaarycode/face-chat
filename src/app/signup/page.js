@@ -1,6 +1,10 @@
 'use client';
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { Box, Typography, Container } from '@mui/material';
+import { Input } from '@/components/ui/Input';
+import { Button } from '@/components/ui/Button';
+import { Card } from '@/components/ui/Card';
 
 export default function Signup() {
   const [username, setUsername] = useState('');
@@ -61,17 +65,14 @@ export default function Signup() {
     setIsLoading(true);
 
     try {
-      // Capture image from video
       const canvas = document.createElement('canvas');
       const context = canvas.getContext('2d');
       canvas.width = videoRef.current.videoWidth;
       canvas.height = videoRef.current.videoHeight;
       context.drawImage(videoRef.current, 0, 0);
       
-      // Convert to blob
       const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg'));
       
-      // Create form data
       const formData = new FormData();
       formData.append('username', username);
       formData.append('password', password);
@@ -105,72 +106,87 @@ export default function Signup() {
   }, []);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-md w-96">
-        <h1 className="text-2xl font-bold mb-6 text-center">Sign Up</h1>
-        
-        <form onSubmit={handleSignup} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Username</label>
-            <input
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-              required
-            />
-          </div>
+    <Container maxWidth="sm">
+      <Box sx={{ 
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}>
+        <Card>
+          <Typography variant="h4" gutterBottom align="center">
+            Sign Up
+          </Typography>
+          
+          <form onSubmit={handleSignup}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+              <Input
+                label="Username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+                fullWidth
+              />
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-              required
-            />
-          </div>
+              <Input
+                label="Password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                fullWidth
+              />
 
-          <div className="space-y-4">
-            {!isCameraStarted ? (
-              <button
-                type="button"
-                onClick={startCamera}
-                className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
-              >
-                Start Camera
-              </button>
-            ) : (
-              <div className="space-y-4">
-                <video
-                  ref={videoRef}
-                  autoPlay
-                  playsInline
-                  muted
-                  className="w-full rounded-lg border"
-                />
-                <button
-                  type="submit"
-                  disabled={isLoading}
-                  className="w-full bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 disabled:bg-gray-400"
+              {!isCameraStarted ? (
+                <Button
+                  onClick={startCamera}
+                  variant="contained"
+                  color="primary"
+                  fullWidth
                 >
-                  {isLoading ? 'Creating Account...' : 'Sign Up'}
-                </button>
-              </div>
-            )}
-          </div>
-        </form>
+                  Start Camera
+                </Button>
+              ) : (
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                  <video
+                    ref={videoRef}
+                    autoPlay
+                    playsInline
+                    muted
+                    style={{ 
+                      width: '100%', 
+                      borderRadius: '8px',
+                      border: '1px solid #e0e0e0'
+                    }}
+                  />
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    color="success"
+                    disabled={isLoading}
+                    fullWidth
+                  >
+                    {isLoading ? 'Creating Account...' : 'Sign Up'}
+                  </Button>
+                </Box>
+              )}
+            </Box>
+          </form>
 
-        <div className="mt-4 text-center">
-          <p className="text-sm text-gray-600">
-            Already have an account?{' '}
-            <a href="/" className="text-blue-500 hover:text-blue-700">
-              Login
-            </a>
-          </p>
-        </div>
-      </div>
-    </div>
+          <Box sx={{ mt: 3, textAlign: 'center' }}>
+            <Typography variant="body2" color="textSecondary">
+              Already have an account?{' '}
+              <Button
+                variant="text"
+                color="primary"
+                onClick={() => router.push('/')}
+              >
+                Login
+              </Button>
+            </Typography>
+          </Box>
+        </Card>
+      </Box>
+    </Container>
   );
 } 
