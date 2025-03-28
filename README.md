@@ -78,3 +78,23 @@ To learn more about the technologies used:
 ## Deployment
 
 This application is deployed on [Vercel Platform](https://vercel.com). Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+Screenshots
+![image](https://github.com/user-attachments/assets/553fff36-7556-459c-a828-60de55006f92)
+
+![image](https://github.com/user-attachments/assets/0f402181-bb68-46a7-b003-b7d8eb45e283)
+
+![image](https://github.com/user-attachments/assets/1bf13560-5d42-492f-b957-f31970148150)
+
+![image](https://github.com/user-attachments/assets/3b0449ac-0055-4bb5-81b6-02e7bc02b1f4)
+
+![image](https://github.com/user-attachments/assets/94b9c262-9d31-4b61-85ee-26163f8ae5bb)
+
+![image](https://github.com/user-attachments/assets/ab577ed3-d0ea-4dec-af82-294af8dd3860)
+
+![image](https://github.com/user-attachments/assets/eb4c098a-65f2-4de0-8bca-232561e0a927)
+
+![image](https://github.com/user-attachments/assets/3ffe2c6c-86f9-4514-8acf-8468f450d977)
+
+
+
