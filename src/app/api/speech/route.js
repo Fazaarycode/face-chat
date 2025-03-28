@@ -1,9 +1,14 @@
 import { NextResponse } from 'next/server';
 import { SpeechClient } from '@google-cloud/speech';
 
+// // Initialize the Speech-to-Text client
+// const speechClient = new SpeechClient({
+//   keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS,
+// });
+
 // Initialize the Speech-to-Text client
 const speechClient = new SpeechClient({
-  keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS,
+  credentials: JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS)
 });
 
 export async function POST(request) {
