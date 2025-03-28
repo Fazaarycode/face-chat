@@ -65,7 +65,7 @@ export default function ChatMessages({ room, username }) {
         socket.disconnect();
       }
     };
-  }, [room]);
+  }, [room, fetchMessages]);
 
   return (
     <div className="bg-[#efeae2] rounded-xl shadow-lg p-6 h-[600px] overflow-y-auto">

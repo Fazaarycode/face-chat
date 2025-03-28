@@ -202,7 +202,7 @@ export default function Login() {
 
           <Box sx={{ mt: 3, textAlign: 'center' }}>
             <Typography variant="body2" color="textSecondary">
-              Don't have an account?{' '}
+            Don&apos;t have an account?{' '}
               <Button
                 variant="text"
                 color="primary"
