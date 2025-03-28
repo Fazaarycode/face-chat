@@ -6,6 +6,9 @@ Application is deployed on Vercel.
 
 Link: https://face-chat-ley2.vercel.app/
 
+or
+https://face-chat-ley2-fim5ljaoo-fazaary-devs-projects.vercel.app/
+
 ## Features
 
 - **Advanced Authentication**
@@ -96,5 +99,6 @@ Screenshots
 
 ![image](https://github.com/user-attachments/assets/3ffe2c6c-86f9-4514-8acf-8468f450d977)
 
+![image](https://github.com/user-attachments/assets/00c48328-c7f0-4c60-895e-f0c976ad9bcf)
 
 
