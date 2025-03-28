@@ -43,7 +43,20 @@ export default function ChatMessages({ room, username }) {
         });
 
         socket.on("new-message", (message) => {
-          setMessages((prev) => [...prev, message]);
+          setMessages((prev) => {
+            // Create a unique identifier using multiple message properties
+            const getMessageId = (msg) => `${msg.senderName}-${msg.timestamp}-${msg.content}`;
+            const newMessageId = getMessageId(message);
+            
+            // Check if this exact message ID already exists
+            const isDuplicate = prev.some(m => getMessageId(m) === newMessageId);
+            
+            if (isDuplicate) {
+              return prev;
+            }
+            
+            return [...prev, message];
+          });
           scrollToBottom();
         });
 
@@ -65,7 +78,7 @@ export default function ChatMessages({ room, username }) {
         socket.disconnect();
       }
     };
-  }, [room, fetchMessages]);
+  }, [room]);
 
   return (
     <div className="bg-[#efeae2] rounded-xl shadow-lg p-6 h-[600px] overflow-y-auto">

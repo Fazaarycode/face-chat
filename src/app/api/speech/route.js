@@ -1,10 +1,6 @@
 import { NextResponse } from 'next/server';
 import { SpeechClient } from '@google-cloud/speech';
 
-// // Initialize the Speech-to-Text client
-// const speechClient = new SpeechClient({
-//   keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS,
-// });
 
 // Initialize the Speech-to-Text client
 const speechClient = new SpeechClient({
@@ -14,7 +10,9 @@ const speechClient = new SpeechClient({
 export async function POST(request) {
   try {
     const { audioData } = await request.json();
-
+    console.log('process.env.GOOGLE_APPLICATION_CREDENTIALS::: ', process.env.GOOGLE_APPLICATION_CREDENTIALS);
+    console.log('process.env.GOOGLE_APPLICATION_CREDENTIALS parsed::: ', JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS));
+    // return;
     // Configure the recognition settings
     const config = {
       encoding: 'WEBM_OPUS',
@@ -23,6 +21,8 @@ export async function POST(request) {
       model: 'default',
       audioChannelCount: 1,
     };
+
+  
 
     // Create the audio input object
     const audio = {

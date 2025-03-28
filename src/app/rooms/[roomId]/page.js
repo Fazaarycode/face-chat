@@ -31,10 +31,6 @@ export default function RoomPage({ params }) {
     }
   }, []);
 
-  useEffect(() => {
-    // ... existing code ...
-  }, [router]); // Add router to dependency array
-
   const startRecording = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ 

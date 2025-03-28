@@ -16,12 +16,17 @@ if (!global.io) {
     }
   });
 
+  // Add debounce to logging
+  const logWithDebounce = debounce((message) => {
+    console.log(message);
+  }, 5000); // Only log once every 5 seconds
+
   io.on('connection', async (socket) => {
-    console.log('Socket connected:', socket.id);
+    logWithDebounce(`Socket connected: ${socket.id}`);
 
     socket.on('join-room', async (roomId) => {
       socket.join(roomId);
-      console.log(`Socket ${socket.id} joined room ${roomId}`);
+      logWithDebounce(`Socket ${socket.id} joined room ${roomId}`);
 
       // Send message history when joining room
       try {
@@ -37,7 +42,7 @@ if (!global.io) {
 
     socket.on('leave-room', (roomId) => {
       socket.leave(roomId);
-      console.log(`Socket ${socket.id} left room ${roomId}`);
+      logWithDebounce(`Socket ${socket.id} left room ${roomId}`);
     });
 
     socket.on('send-message', async (data) => {
@@ -62,11 +67,24 @@ if (!global.io) {
     });
 
     socket.on('disconnect', () => {
-      console.log('Socket disconnected:', socket.id);
+      logWithDebounce(`Socket disconnected: ${socket.id}`);
     });
   });
 
   global.io = io;
+}
+
+// Simple debounce function
+function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
 }
 
 export async function GET() {

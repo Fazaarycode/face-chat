@@ -19,7 +19,7 @@ export default function ChatHome() {
     } else {
       router.push('/');
     }
-  }, [router]);
+  }, []);
 
   useEffect(() => {
     fetch('/api/chat')

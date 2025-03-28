@@ -7,11 +7,9 @@ import { theme } from '../theme/theme';
 
 export function Providers({ children }) {
   return (
-    <SessionProvider>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         {children}
       </ThemeProvider>
-    </SessionProvider>
   );
 } 
