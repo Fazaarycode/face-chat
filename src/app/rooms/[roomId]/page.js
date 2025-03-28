@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, use } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import ChatMessages from '../../../components/ChatMessages';
 import { Box, Typography, Container } from '@mui/material';
@@ -12,7 +12,7 @@ import MicOffIcon from '@mui/icons-material/MicOff';
 import { toast } from 'sonner'; // Make sure to install: npm install sonner
 
 export default function RoomPage({ params }) {
-  const roomId = use(params).roomId;
+  const roomId = params.roomId;
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
   const router = useRouter();

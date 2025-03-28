@@ -53,14 +53,15 @@ export default function ChatHome() {
               fullWidth
               value={newRoomName}
               onChange={(e) => setNewRoomName(e.target.value)}
-              placeholder="Enter room name"
+              placeholder="Enter room name and press Create Room"
             />
             <Button 
               type="submit"
               variant="contained"
               color="primary"
+              disabled={!newRoomName.trim()}
             >
-              Create Room
+              Create 
             </Button>
           </Box>
         </form>

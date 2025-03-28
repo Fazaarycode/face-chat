@@ -1,4 +1,33 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Face ID Chat Application
+
+This is a Next.js-based chat application with Face ID authentication and speech-to-text capabilities.
+
+## Features
+
+- **Advanced Authentication**
+  - Face ID login integration
+  - Traditional username/password login
+  - Combined Face ID + credentials authentication
+  - Default credentials: username: `faz`, password: `faz`
+
+- **Real-time Chat System**
+  - Socket.io based real-time messaging
+  - Multiple chat rooms support
+  - Message history persistence
+
+- **Speech-to-Text Integration**
+  - Google Cloud Speech-to-Text API integration
+  - Live microphone input support
+  - Audio playback verification feature
+
+- **Technical Stack**
+  - Next.js API routes for backend management
+  - MongoDB database for storing:
+    - User profiles and face data
+    - Chat rooms
+    - Message history
+    - Authentication data
+  - Vercel deployment
 
 ## Getting Started
 
@@ -16,21 +45,32 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## Important Notes
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Microphone Setup
+- Ensure your microphone is properly configured
+- Test audio playback to verify microphone functionality
+- Speech-to-text service will only work with a working microphone
+
+### User Registration
+1. Use the sign-up feature to create a new account
+2. Register your face during the sign-up process
+3. Complete the registration with username and password
+
+### Default Test Account
+- Username: faz
+- Password: faz
+- You need me for this - You can use the sign-up feature to create a new account
 
 ## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+To learn more about the technologies used:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- [Next.js Documentation](https://nextjs.org/docs)
+- [Socket.io Documentation](https://socket.io/docs/v4)
+- [Google Cloud Speech-to-Text](https://cloud.google.com/speech-to-text)
+- [MongoDB Documentation](https://docs.mongodb.com)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Deployment
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This application is deployed on [Vercel Platform](https://vercel.com). Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
