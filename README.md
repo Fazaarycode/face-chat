@@ -2,6 +2,10 @@
 
 This is a Next.js-based chat application with Face ID authentication and speech-to-text capabilities.
 
+Application is deployed on Vercel. 
+
+Link: https://face-chat-ley2.vercel.app/
+
 ## Features
 
 - **Advanced Authentication**
